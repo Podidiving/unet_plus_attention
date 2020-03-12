@@ -1,6 +1,6 @@
 import torch
 import gc
-from tqdm import tqdm_notebook as tqdm
+from tqdm import tqdm as tqdm
 import numpy as np
 from matplotlib import pyplot as plt
 
