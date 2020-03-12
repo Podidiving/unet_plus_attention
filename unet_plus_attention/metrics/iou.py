@@ -16,12 +16,15 @@ def iou(
     classes: List[str] = None,
     eps: float = 1e-7,
     threshold: float = None,
-    activation: str = "Softmax2d"
+    activation: str = "Argmax"
 ):
     if activation == 'Sigmoid':
         activation_fn = torch.sigmoid
     elif activation == 'Softmax2d':
         activation_fn = torch.nn.functional.softmax
+    elif activation == 'Argmax':
+        activation_fn = (lambda x: x)
+        outputs = outputs.argmax(1)
     else:
         activation_fn = (lambda x: x)
     outputs = activation_fn(outputs)
@@ -61,7 +64,7 @@ def eval_iou(model, dataloader, device, verbose=True):
         for images, masks in dataloader:
             images = images.to(device)
             masks = masks.to(device).type(torch.long)
-            iou_score += iou(model(images), masks).detach().item()
+            iou_score += iou(model(images).cpu(), masks.cpu()).detach().item()
             num_objects += images.shape[0]
             del images
             del masks
