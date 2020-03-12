@@ -65,7 +65,7 @@ def eval_iou(model, dataloader, device, verbose=True):
             images = images.to(device)
             masks = masks.to(device).type(torch.long)
             iou_score += iou(model(images).cpu(), masks.cpu()).detach().item()
-            num_objects += images.shape[0]
+            num_objects += 1
             del images
             del masks
             gc.collect()
