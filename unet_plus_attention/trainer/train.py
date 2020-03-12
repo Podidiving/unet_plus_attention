@@ -11,16 +11,17 @@ except ModuleNotFoundError:
 
 
 def train(
-        model,
-        optimizer,
-        loss_fn,
-        train_dataloader,
-        val_dataloader,
-        scheduler,
-        device,
-        num_epochs,
-        type_=torch.long,
-        verbose=False
+        model: torch.nn.Module,
+        optimizer: torch.optim,
+        loss_fn: "torch.nn.module._Loss",
+        train_dataloader: torch.utils.data.DataLoader,
+        val_dataloader: torch.utils.data.DataLoader,
+        scheduler: torch.optim.lr_scheduler,
+        device: torch.device,
+        num_epochs: int,
+        type_: torch.dtype = torch.long,
+        verbose: bool = False,
+        best_model_name: str = 'best_model.pth'
 ):
     train_loss_hist = []
     val_loss_hist = []
@@ -30,6 +31,8 @@ def train(
     gc.collect()
     optimizer.zero_grad()
     torch.cuda.empty_cache()
+
+    best_model_acc = -1
 
     for e in range(num_epochs):
         print(f'Epoch {e + 1} out of {num_epochs}')
@@ -83,7 +86,10 @@ def train(
 
         gc.collect()
         torch.cuda.empty_cache()
-        epoch_val_loss_hist.append(np.mean(val_loss_hist[-len(val_dataloader):]))
+        last_epoch_val_loss = np.mean(val_loss_hist[-len(val_dataloader):])
+        epoch_val_loss_hist.append(last_epoch_val_loss)
+        if best_model_acc < last_epoch_val_loss:
+            torch.save(model.state_dict(), best_model_name)
         if verbose:
             try:
                 clear_output()
