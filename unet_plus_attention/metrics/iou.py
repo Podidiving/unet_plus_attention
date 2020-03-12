@@ -7,10 +7,6 @@ from tqdm import tqdm as tqdm
 import torch
 
 
-def Softmax(input_):
-    return torch.nn.functional.softmax(input_, 1)
-
-
 #  https://github.com/catalyst-team/catalyst/blob/master/catalyst/utils/metrics/iou.py
 def iou(
     outputs: torch.Tensor,
@@ -25,7 +21,7 @@ def iou(
     if activation == 'Sigmoid':
         activation_fn = torch.sigmoid
     elif activation == 'Softmax2d':
-        activation_fn = Softmax
+        activation_fn = torch.nn.functional.softmax
     else:
         activation_fn = (lambda x: x)
     outputs = activation_fn(outputs)
