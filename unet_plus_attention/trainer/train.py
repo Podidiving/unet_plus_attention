@@ -4,6 +4,8 @@ from tqdm import tqdm_notebook as tqdm
 import numpy as np
 from matplotlib import pyplot as plt
 
+from typing import Callable
+
 try:
     from IPython.display import clear_output
 except ModuleNotFoundError:
@@ -11,15 +13,15 @@ except ModuleNotFoundError:
 
 
 def train(
-        model: torch.nn.Module,
-        optimizer: torch.optim,
-        loss_fn: "torch.nn.module._Loss",
-        train_dataloader: torch.utils.data.DataLoader,
-        val_dataloader: torch.utils.data.DataLoader,
-        scheduler: torch.optim.lr_scheduler,
-        device: torch.device,
+        model: "torch.nn.Module",
+        optimizer: "torch.optim",
+        loss_fn: Callable,
+        train_dataloader: "torch.utils.data.DataLoader",
+        val_dataloader: "torch.utils.data.DataLoader",
+        scheduler: "torch.optim.lr_scheduler",
+        device: "torch.device",
         num_epochs: int,
-        type_: torch.dtype = torch.long,
+        type_: "torch.dtype "= torch.long,
         verbose: bool = False,
         best_model_name: str = 'best_model.pth'
 ):
