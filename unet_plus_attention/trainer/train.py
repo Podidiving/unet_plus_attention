@@ -93,6 +93,7 @@ def train(
         epoch_val_loss_hist.append(last_epoch_val_loss)
 
         if best_model_acc < last_epoch_val_loss:
+            best_model_acc = last_epoch_val_loss
             torch.save(model.state_dict(), best_model_name)
 
         if verbose:
