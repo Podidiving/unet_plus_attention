@@ -1,0 +1,6 @@
+torch==1.4.0
+albumentations==0.4.3
+Pillow
+numpy
+
+tqdm
