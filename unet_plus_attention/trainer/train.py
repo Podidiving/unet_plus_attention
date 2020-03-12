@@ -101,8 +101,9 @@ def train(
 
                 images = batch[0]
                 masks = batch[1]
-                image = images[np.random.randint(0, images.shape[0])]
-                mask = masks[np.random.randint(0, masks.shape[0])]
+                image_index = np.random.randint(0, images.shape[0])
+                image = images[image_index]
+                mask = masks[image_index]
 
                 pred_mask = model(image.to(device).unsqueeze(0)).squeeze(0).cpu()
 
