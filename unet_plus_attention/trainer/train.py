@@ -34,7 +34,7 @@ def train(
     optimizer.zero_grad()
     torch.cuda.empty_cache()
 
-    best_model_acc = -1
+    best_model_loss = np.inf
 
     for e in range(num_epochs):
         print(f'Epoch {e + 1} out of {num_epochs}')
@@ -92,8 +92,8 @@ def train(
         last_epoch_val_loss = np.mean(val_loss_hist[-len(val_dataloader):])
         epoch_val_loss_hist.append(last_epoch_val_loss)
 
-        if best_model_acc < last_epoch_val_loss:
-            best_model_acc = last_epoch_val_loss
+        if best_model_loss > last_epoch_val_loss:
+            best_model_loss = last_epoch_val_loss
             torch.save(model.state_dict(), best_model_name)
 
         if verbose:
