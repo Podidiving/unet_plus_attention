@@ -92,8 +92,12 @@ def train(
             axs[0, 2].plot(np.arange(len(epoch_val_loss_hist)), epoch_val_loss_hist, label='val')
             with torch.no_grad():
                 batch = next(iter(val_dataloader))
-                # batch = batch[0]
-                image, mask = batch[np.random.randint(0, len(batch))]
+
+                images = batch[0]
+                masks = batch[1]
+                image = images[np.random.randint(0, images.shape[0])]
+                mask = masks[np.random.randint(0, masks.shape[0])]
+
                 pred_mask = model(image.to(device).unsqueeze(0)).squeeze(0).cpu()
 
                 plt.axis('off')
