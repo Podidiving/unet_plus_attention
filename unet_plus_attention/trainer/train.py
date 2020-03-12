@@ -4,7 +4,10 @@ from tqdm import tqdm_notebook as tqdm
 import numpy as np
 from matplotlib import pyplot as plt
 
-from IPython.display import clear_output
+try:
+    from IPython.display import clear_output
+except ModuleNotFoundError:
+    pass
 
 
 def train(
@@ -82,7 +85,10 @@ def train(
         torch.cuda.empty_cache()
         epoch_val_loss_hist.append(np.mean(val_loss_hist[-len(val_dataloader):]))
         if verbose:
-            clear_output()
+            try:
+                clear_output()
+            except NameError:
+                break
             print(f'Train: {epoch_train_loss_hist[-1]}')
             print(f'Validation: {epoch_val_loss_hist[-1]}')
             fig, axs = plt.subplots(2, 3, figsize=(25, 15), sharey=False)
