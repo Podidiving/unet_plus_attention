@@ -4,7 +4,7 @@ from tqdm import tqdm_notebook as tqdm
 import numpy as np
 from matplotlib import pyplot as plt
 
-from typing import Callable
+from typing import Callable, List, Tuple
 
 try:
     from IPython.display import clear_output
@@ -24,7 +24,7 @@ def train(
         type_: "torch.dtype "= torch.long,
         verbose: bool = False,
         best_model_name: str = 'best_model.pth'
-):
+) -> Tuple[List[float], List[float]]:
     train_loss_hist = []
     val_loss_hist = []
     epoch_train_loss_hist = []
@@ -88,10 +88,13 @@ def train(
 
         gc.collect()
         torch.cuda.empty_cache()
+
         last_epoch_val_loss = np.mean(val_loss_hist[-len(val_dataloader):])
         epoch_val_loss_hist.append(last_epoch_val_loss)
+
         if best_model_acc < last_epoch_val_loss:
             torch.save(model.state_dict(), best_model_name)
+
         if verbose:
             try:
                 clear_output()
